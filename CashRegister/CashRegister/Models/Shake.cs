@@ -6,12 +6,12 @@ namespace CashRegister.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        private readonly string _id;
+        private string _id;
 
-        [BsonElement("Name")]
+        [BsonElement("name")]
         private string _name;
 
-        [BsonElement("Description")]
+        [BsonElement("description")]
         private string _description;
 
         [BsonElement("smallPrice")]
@@ -20,11 +20,11 @@ namespace CashRegister.Models
         [BsonElement("mediumPrice")]
         private double _mediumPrice;
 
-        [BsonElement("largePrice")]
+        [BsonElement("lsargePrice")]
         private double _largePrice;
 
         public string Name { get { return _name; } }
-        public string Id { get { return _id; } }
+        public string Id { get { return _id; } set { _id = value; } }
         public Shake(string id, string name, string description, double smallPrice, double mediumPrice, double largePrice)
         {
             _id = id;
