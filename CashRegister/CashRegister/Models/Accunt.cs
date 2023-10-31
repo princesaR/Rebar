@@ -4,11 +4,14 @@ namespace CashRegister.Models
 {
     public class Accunt
     {
+        [BsonElement("id")]
+        private string _id; 
+
         [BsonElement("orders")]
-        public List<Order> orders;
+        private List<Order> orders;
 
         [BsonElement("totalPrice")]
-        public double totalPrice;
+        private double totalPrice;
 
         public Accunt()
         {
@@ -17,10 +20,6 @@ namespace CashRegister.Models
 
         public string Id { get; internal set; }
 
-        public void AddOrder(Order order)
-        {
-            orders.Add(order);
-            totalPrice += order.TotalPrice;
-        }
+       
     }
 }

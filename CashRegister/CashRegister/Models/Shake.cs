@@ -1,6 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CashRegister.Validation;
 namespace CashRegister.Models
+
 {
     public class Shake
     {
@@ -20,14 +22,28 @@ namespace CashRegister.Models
         [BsonElement("mediumPrice")]
         private double _mediumPrice;
 
-        [BsonElement("lsargePrice")]
+        [BsonElement("largePrice")]
         private double _largePrice;
 
-        public string Name { get { return _name; } }
-        public string Id { get { return _id; } set { _id = value; } }
+        public string Name 
+        { 
+            get { return _name; }
+            set
+            {
+                try
+                {
+                    ValidationCheck.IsShakeNameValid(value);
+                }
+                catch(Exception ex)
+                { 
+                    throw ex;  
+                }
+            }
+        }
+        public string Id { get { return _id; }  }
         public Shake(string id, string name, string description, double smallPrice, double mediumPrice, double largePrice)
         {
-            _id = id;
+            _id = new Guid().ToString();
             this._name = name;
             this._description = description;
             _smallPrice = smallPrice;

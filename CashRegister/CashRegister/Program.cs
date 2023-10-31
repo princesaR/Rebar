@@ -12,10 +12,13 @@ builder.Services.Configure<RebarDatabaseSettings>(builder.Configuration.GetSecti
 builder.Services.AddSingleton<MongodbRebarContext>(serviceProvider =>
 {
     var settings = serviceProvider.GetRequiredService<IOptions<RebarDatabaseSettings>>().Value;
-    return new MongodbRebarContext(settings.ConnectionString, settings.DatabaseName);
+    return new MongodbRebarContext(settings.ConnectionString.ToString(), settings.DatabaseName.ToString());
 });
 
-//builder.Services.AddScoped<IShakeService, ShakeService>();
+builder.Services.AddScoped<IShakeService, ShakeService>();
+builder.Services.AddScoped<IOrderService, OrderService> ();
+builder.Services.AddScoped<IAccuntService, AccuntService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
