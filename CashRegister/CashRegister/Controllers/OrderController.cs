@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CashRegister.Services;
 using CashRegister.Models;
+using System.Linq.Expressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,12 +9,12 @@ namespace CashRegister.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    public class OrderControoler : ControllerBase
+    public class OrderController : ControllerBase
     {
 
         private readonly IOrderService _orderService;
 
-        public OrderControoler(IOrderService orderService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
         }
@@ -29,12 +30,11 @@ namespace CashRegister.Controllers
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Order>> Get(string id)
         {
-            var shake = await _orderService.GetAsync(id);
-
-            if (shake is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
+            var shake = await _orderService.GetAsync(id);
 
             return shake;
         }
@@ -43,32 +43,35 @@ namespace CashRegister.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Order newOrder)
         {
-            await _orderService.CreateAsync(newOrder);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _orderService.CreateAsync(newOrder);
 
-            return CreatedAtAction(nameof(Get), new { id = newOrder.Id }, newOrder);
+                return CreatedAtAction(nameof(Get), new { id = newOrder.Id }, newOrder);
+            }
+            catch (Exception ex)
+            {
+                   return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, [FromBody] Order updatedOrder)
         {
-            var shake = await _orderService.GetAsync(id);
-
-            if (shake is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
-            //notice ID is public, fix it!
-            updatedOrder.Id = shake.Id;
 
             await _orderService.UpdateAsync(id, updatedOrder);
 
             return NoContent();
         }
 
-        // DELETE api/<OrderControoler>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

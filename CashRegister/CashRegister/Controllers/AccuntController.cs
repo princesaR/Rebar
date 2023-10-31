@@ -19,46 +19,73 @@ namespace CashRegister.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Accunt>>> Get()
         {
-            return await _accuntService.GetAsync();
+            try
+            {
+                return await _accuntService.GetAsync();
+            }
+            catch (Exception ex) { }
+            {
+                throw new Exception("");
+            }
         }
 
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Accunt>> Get(string id)
         {
-            var shake = await _accuntService.GetAsync(id);
-
-            if (shake is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
+            }
+            try
+            {
+               var shake = await _accuntService.GetAsync(id);
+
+                return shake;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("");
             }
 
-            return shake;
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Accunt newAccunt)
         {
-            await _accuntService.CreateAsync(newAccunt);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _accuntService.CreateAsync(newAccunt);
 
-            return CreatedAtAction(nameof(Get), new { id = newAccunt.Id }, newAccunt);
+                return CreatedAtAction(nameof(Get), new { id = newAccunt.Id }, newAccunt);
+            }
+            catch( Exception ex)
+            {
+                throw new Exception();
+            }
+           
         }
 
 
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, [FromBody] Accunt updatedAccunt)
         {
-            var shake = await _accuntService.GetAsync(id);
-
-            if (shake is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
-            //notice ID is public, fix it!
-            updatedAccunt.Id = shake.Id;
-
-            await _accuntService.UpdateAsync(id, updatedAccunt);
-
-            return NoContent();
+            try
+            {
+                await _accuntService.UpdateAsync(id, updatedAccunt);
+                return CreatedAtAction(nameof(Get), new { id = updatedAccunt.Id }, updatedAccunt);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception();
+            }
         }
     }
 }

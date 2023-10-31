@@ -27,12 +27,11 @@ namespace CashRegister.Controllers
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Shake>> Get(string id)
         {
-            var shake = await _shakeService.GetAsync(id);
-
-            if (shake is null)
+            if(!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
+            var shake = await _shakeService.GetAsync(id);
 
             return shake;
         }
@@ -40,6 +39,10 @@ namespace CashRegister.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Shake newShake)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             await _shakeService.CreateAsync(newShake);
 
             return CreatedAtAction(nameof(Get), new { id = newShake.Id }, newShake);
@@ -48,15 +51,10 @@ namespace CashRegister.Controllers
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id,[FromBody] Shake updatedShake)
         {
-            var shake = await _shakeService.GetAsync(id);
-
-            if (shake is null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
-            //notice ID is public, fix it!
-            updatedShake.Id = shake.Id;
-
             await _shakeService.UpdateAsync(id, updatedShake);
 
             return NoContent();
@@ -65,13 +63,10 @@ namespace CashRegister.Controllers
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var shake = await _shakeService.GetAsync(id);
-
-            if (shake is null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
-
             await _shakeService.RemoveAsync(id);
 
             return NoContent();
