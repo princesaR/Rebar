@@ -48,7 +48,7 @@ namespace CashRegister.Controllers
             return CreatedAtAction(nameof(Get), new { id = newShake.Id }, newShake);
         }
 
-        [HttpPut("{id:length(24)}")]
+        [HttpPut("{id:length(36)}")]
         public async Task<IActionResult> Update(string id,[FromBody] Shake updatedShake)
         {
             if (!ModelState.IsValid)
