@@ -1,3 +1,4 @@
+using CashRegister.Data;
 using CashRegister.Models;
 using CashRegister.Services;
 using Microsoft.Extensions.Options;
@@ -5,18 +6,16 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Register services here
+builder.Services.Configure<RebarDatabaseSettings>(builder.Configuration.GetSection(nameof(RebarDatabaseSettings)));
 
-builder.Services.Configure<RebarDatabaseSettings>(
-    builder.Configuration.GetSection(nameof(RebarDatabaseSettings)));
+builder.Services.AddSingleton<MongodbRebarContext>(serviceProvider =>
+{
+    var settings = serviceProvider.GetRequiredService<IOptions<RebarDatabaseSettings>>().Value;
+    return new MongodbRebarContext(settings.ConnectionString, settings.DatabaseName);
+});
 
-builder.Services.AddSingleton<IRebarDatabaseSettings>(sp =>
-    sp.GetRequiredService<IOptions<RebarDatabaseSettings>>().Value);
-
-builder.Services.AddSingleton<IMongoClient>(s =>
-    new MongoClient(builder.Configuration.GetValue<string>("RebarDatabaseSettings:ConnecionString")));
-
-builder.Services.AddScoped<IShakeService, ShakeService>();
+//builder.Services.AddScoped<IShakeService, ShakeService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
