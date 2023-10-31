@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 using CashRegister.Models;
-
+using CashRegister.Data;
 
 namespace CashRegister.Services
 {
@@ -9,11 +9,9 @@ namespace CashRegister.Services
 
         private readonly IMongoCollection<Shake> _shakes;
 
-       
-        public ShakeService(IRebarDatabaseSettings setting, IMongoClient mongoClient)
+        public ShakeService(MongodbRebarContext context)
         {
-            var dataBase = mongoClient.GetDatabase(setting.DatabaseName);
-            var _shakes = dataBase.GetCollection<Shake>(setting.ShakesCollectionName);
+            _shakes = context.Shakes();
         }
 
 

@@ -1,4 +1,5 @@
-﻿using CashRegister.Models;
+﻿using CashRegister.Data;
+using CashRegister.Models;
 using MongoDB.Driver;
 
 namespace CashRegister.Services
@@ -7,10 +8,9 @@ namespace CashRegister.Services
     {
         private readonly IMongoCollection<Order> _orders;
 
-        public OrderService(IRebarDatabaseSettings setting, IMongoClient mongoClient)
+        public OrderService(MongodbRebarContext context)
         {
-            var dataBase = mongoClient.GetDatabase(setting.DatabaseName);
-            var _shakes = dataBase.GetCollection<Order>(setting.OrdersCollectionName);
+            _orders = context.Orders();
         }
        
 

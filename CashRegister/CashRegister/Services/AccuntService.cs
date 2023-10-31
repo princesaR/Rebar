@@ -1,4 +1,5 @@
-﻿using CashRegister.Models;
+﻿using CashRegister.Data;
+using CashRegister.Models;
 using MongoDB.Driver;
 
 namespace CashRegister.Services
@@ -7,10 +8,10 @@ namespace CashRegister.Services
     {
         private readonly IMongoCollection<Accunt> _accunts;
 
-        public AccuntService(IRebarDatabaseSettings setting, IMongoClient mongoClient)
+        public AccuntService(MongodbRebarContext context)
         {
-            var dataBase = mongoClient.GetDatabase(setting.DatabaseName);
-            var _accunts = dataBase.GetCollection<Shake>(setting.ShakesCollectionName);
+
+            var _accunts = context.Accunts();
         }
        
         public async Task<List<Accunt>> GetAsync()
