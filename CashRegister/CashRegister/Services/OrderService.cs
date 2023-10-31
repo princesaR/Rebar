@@ -37,5 +37,5 @@ namespace CashRegister.Services
         {
             await _orders.DeleteOneAsync(x => x.Id == id);
         }
-    }
+     }
 }

@@ -9,7 +9,7 @@ namespace CashRegister.Services
         Task<Accunt?> GetAsync(string id);
         Task CreateAsync(Accunt newAccunt);
         Task UpdateAsync(string id, Accunt updatedAccunt);
-        Task RemoveAsync(string id);
+       
 
     }
 }

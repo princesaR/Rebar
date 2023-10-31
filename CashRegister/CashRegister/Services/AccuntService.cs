@@ -28,15 +28,11 @@ namespace CashRegister.Services
             await _accunts.InsertOneAsync(newAccunt);
         }
 
-
         public async Task UpdateAsync(string id, Accunt updatedAccunt)
         {
             await _accunts.ReplaceOneAsync(x => x.Id == id, updatedAccunt);
         }
 
-        public async Task RemoveAsync(string id)
-        {
-            await _accunts.DeleteOneAsync(x => x.Id == id);
-        }
+
     }
 }
