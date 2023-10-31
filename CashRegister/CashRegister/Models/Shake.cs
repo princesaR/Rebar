@@ -1,49 +1,43 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using CashRegister.Validation;
+using System.ComponentModel.DataAnnotations;
+
 namespace CashRegister.Models
 
 {
     public class Shake
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+       
         private string _id;
-
-        [BsonElement("name")]
         private string _name;
-
-        [BsonElement("description")]
         private string _description;
-
-        [BsonElement("smallPrice")]
         private double _smallPrice;
-
-        [BsonElement("mediumPrice")]
         private double _mediumPrice;
-
-        [BsonElement("largePrice")]
         private double _largePrice;
 
-        public string Name 
-        { 
-            get { return _name; }
-            set
-            {
-                try
-                {
-                    ValidationCheck.IsShakeNameValid(value);
-                }
-                catch(Exception ex)
-                { 
-                    throw ex;  
-                }
-            }
-        }
-        public string Id { get { return _id; }  }
-        public Shake(string id, string name, string description, double smallPrice, double mediumPrice, double largePrice)
+        [BsonId, BsonElement("Id")]
+        public string Id { get { return _id; } }
+
+        [BsonElement("name"), BsonRequired, MaxLength(20)]
+        public string Name { get{ return _name; } }
+
+        [BsonElement("description"), BsonRequired, MaxLength(100)]
+        public string Description { get { return _description; } }
+
+        [BsonElement("smallPrice"), BsonRequired]
+        public double SmallPrice { get { return _smallPrice; } }
+
+        [BsonElement("mediumPrice"), BsonRequired]
+        public  double MediumPrice { get { return _mediumPrice; } }
+
+        [BsonElement("largePrice"), BsonRequired]
+        public  double largePrice { get { return _largePrice; } }
+
+        
+        public Shake(string name, string description, double smallPrice, double mediumPrice, double largePrice)
         {
-            _id = new Guid().ToString();
+            _id = Guid.NewGuid().ToString();
             this._name = name;
             this._description = description;
             _smallPrice = smallPrice;
