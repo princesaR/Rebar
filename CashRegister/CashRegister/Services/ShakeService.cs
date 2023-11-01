@@ -30,10 +30,17 @@ namespace CashRegister.Services
         public async Task RemoveAsync(string id) =>
             await _shakes.DeleteOneAsync(x => x.Id == id);
 
-        private async Task<Shake?> GetShakeIdByName(string name)
+        public string GetIdByNameAsync(string name)
         {
-            return await _shakes.Find(x => x.Name.Equals(name)).FirstOrDefaultAsync();
+
+            var shake = _shakes.Find(x => x.Name.Equals(name)).First();
+            if (shake == null)
+            {
+                throw new ArgumentNullException(nameof(name), "shake not found");
+            }
+            return shake.Id;
         }
 
+       
     }
 }
