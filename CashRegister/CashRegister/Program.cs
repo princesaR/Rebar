@@ -1,3 +1,4 @@
+using CashRegister.BeisnessLayer;
 using CashRegister.Data;
 using CashRegister.Models;
 using CashRegister.Services;
@@ -17,7 +18,8 @@ builder.Services.AddSingleton<MongodbRebarContext>(serviceProvider =>
 
 builder.Services.AddScoped<IShakeService, ShakeService>();
 builder.Services.AddScoped<IOrderService, OrderService> ();
-builder.Services.AddScoped<IAccuntService, AccuntService>();
+builder.Services.AddScoped<IOrderLogic, OrderLogic>();
+
 
 
 builder.Services.AddControllers();

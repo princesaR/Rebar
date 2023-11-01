@@ -23,9 +23,6 @@ namespace CashRegister.Data
            return _database.GetCollection<Order>("Orders");
         }
 
-        public IMongoCollection<Accunt> Accunts()
-        {
-            return _database.GetCollection<Accunt>("Accunts");
-        }
+       
     }
 }
