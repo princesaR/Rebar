@@ -24,7 +24,7 @@ namespace CashRegister.Controllers
         
 
 
-        [HttpGet("{id:length(24)}")]
+        [HttpGet("{id:length(36)}")]
         public async Task<ActionResult<Shake>> Get(string id)
         {
             if(!ModelState.IsValid)
@@ -32,8 +32,11 @@ namespace CashRegister.Controllers
                 return BadRequest(ModelState);
             }
             var shake = await _shakeService.GetAsync(id);
-
-            return shake;
+            if(shake != null)
+            {
+                return shake;
+            }
+            return NotFound();
         }
 
         [HttpPost]
@@ -60,13 +63,10 @@ namespace CashRegister.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:length(24)}")]
+        [HttpDelete("{id:length(40)}")]
         public async Task<IActionResult> Delete(string id)
         {
-            if (ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            
             await _shakeService.RemoveAsync(id);
 
             return NoContent();

@@ -2,6 +2,9 @@
 using CashRegister.Services;
 using CashRegister.Models;
 using System.Linq.Expressions;
+using MongoDB.Driver.Linq;
+using CashRegister.LogicLayer;
+using CashRegister.Dto;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,10 +15,11 @@ namespace CashRegister.Controllers
     public class OrderController : ControllerBase
     {
 
+        private readonly IOrderLogic _orderLogic;
         private readonly IOrderService _orderService;
-
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderLogic orderLogic, IOrderService orderService)
         {
+            _orderLogic = orderLogic;
             _orderService = orderService;
         }
 
@@ -26,32 +30,37 @@ namespace CashRegister.Controllers
             return await _orderService.GetAsync();
         }
 
-
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Order>> Get(string id)
+        [HttpGet("{id:length(36)}")]
+        public async Task<ActionResult<Order>> GetById(string id)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-            var shake = await _orderService.GetAsync(id);
-
-            return shake;
+            try
+            {
+                var order =  await _orderLogic.GetAsync(id);
+                return order;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+            
         }
 
-        // POST api/<OrderControoler>
+
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Order newOrder)
+        public async Task<IActionResult> Post(OrderDto orderDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             try
-            {
-                await _orderService.CreateAsync(newOrder);
-
-                return CreatedAtAction(nameof(Get), new { id = newOrder.Id }, newOrder);
+            { 
+                var order = await _orderLogic.Post(orderDto);
+                return CreatedAtAction(nameof(Get), new { id = order.Id }, order);
             }
             catch (Exception ex)
             {
@@ -59,18 +68,10 @@ namespace CashRegister.Controllers
             }
         }
 
-        [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, [FromBody] Order updatedOrder)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
 
-            await _orderService.UpdateAsync(id, updatedOrder);
+      
 
-            return NoContent();
-        }
+       
 
         
     }
