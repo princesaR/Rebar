@@ -2,7 +2,7 @@
 using CashRegister.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CashRegister.BeisnessLayer
+namespace CashRegister.LogicLayer
 {
     public interface IOrderLogic
     {
