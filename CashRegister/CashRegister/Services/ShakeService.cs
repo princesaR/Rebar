@@ -32,7 +32,6 @@ namespace CashRegister.Services
 
         public string GetIdByNameAsync(string name)
         {
-
             var shake = _shakes.Find(x => x.Name.Equals(name)).First();
             if (shake == null)
             {
