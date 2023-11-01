@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CashRegister.Models
 {
@@ -8,13 +9,15 @@ namespace CashRegister.Models
         private double _percentage;
         private string _discription;
 
-        [BsonElement("discountId")]
+        [BsonElement("Id")]
         public string Id { get { return _id; } }
 
-        [BsonElement("precentage")]
+        [BsonElement("Precentage")]
+        [Required]
         public double Percentage { get { return _percentage; } }
 
-        [BsonElement("discription")]
+        [BsonElement("Discription")]
+        [Required]
         public string Discription { get { return _discription; } }
 
         public Discount(double percentage, string description)
