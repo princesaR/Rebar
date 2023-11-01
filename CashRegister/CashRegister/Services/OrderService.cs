@@ -16,12 +16,13 @@ namespace CashRegister.Services
 
         public async Task<List<Order>> GetAsync()
         {
-           return await _orders.Find(_ => true).ToListAsync();
+           return await _orders.Find(x => true).ToListAsync();
+           
         }
 
         public async Task<Order?> GetAsync(string id)
         {
-         return  await _orders.Find(x => x.Id == id).FirstOrDefaultAsync();
+         return await _orders.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task CreateAsync(Order newOrder)
@@ -37,5 +38,10 @@ namespace CashRegister.Services
         {
             await _orders.DeleteOneAsync(x => x.Id == id);
         }
-     }
+
+        public Task<List<Order?>> GetOrdersOfToday()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
