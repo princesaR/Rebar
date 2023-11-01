@@ -10,5 +10,7 @@ namespace CashRegister.Services
         Task CreateAsync(Order newOrder);
         Task UpdateAsync(string id, Order updatedOrder);
         Task RemoveAsync(string id);
+        Task<List<Order?>> GetOrdersOfToday();
+            
     }
 }
